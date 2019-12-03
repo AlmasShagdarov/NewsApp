@@ -12,7 +12,7 @@ android {
     }
     defaultConfig {
         applicationId "com.beone.newsapp"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -52,7 +52,6 @@ dependencies {
     // Retrofit with Moshi Converters
     implementation "com.squareup.retrofit2:retrofit:$version_retrofit"
     implementation "com.squareup.retrofit2:converter-moshi:$version_retrofit"
-    implementation "com.google.android.gms:play-services-auth:17.0.0"
     implementation "com.squareup.moshi:moshi:$version_moshi"
     implementation "com.squareup.moshi:moshi-kotlin:$version_moshi"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version_kotlin_coroutines"
@@ -62,5 +61,4 @@ dependencies {
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$version_retrofit_coroutines_adapter"
     implementation 'androidx.cardview:cardview:1.0.0'
 
-    implementation "com.squareup.okhttp3:okhttp:3.12.0"
 }
