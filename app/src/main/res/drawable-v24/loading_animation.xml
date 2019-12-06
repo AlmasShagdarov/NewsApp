@@ -18,6 +18,7 @@
   -->
 
 <animated-rotate xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/loading_img"
-    android:pivotX="50%"
-    android:pivotY="50%" />
+    android:drawable="@drawable/loading_image_glide"
+    android:interpolator="@android:anim/linear_interpolator"
+    android:pivotX="50.0%"
+    android:pivotY="50.0%" />

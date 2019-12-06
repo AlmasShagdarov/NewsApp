@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.beone.newsapp.apiToken
 import com.beone.newsapp.network.News
 import com.beone.newsapp.network.NewsApi
 import kotlinx.coroutines.*
@@ -31,7 +32,7 @@ class NewsViewModel : ViewModel() {
         coroutineScope.launch {
             lateinit var listResult: List<News>
             withContext(Dispatchers.IO){
-                listResult = NewsApi.retrofitService.getTopHeadlinesAsync("us", "f496507f86674de79a0b5e7a875f6d4e").articles
+                listResult = NewsApi.retrofitService.getTopNews("ru").articles
             }
             _topHeadlines.value = listResult
             Log.d("Status:", "Done")

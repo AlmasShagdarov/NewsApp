@@ -25,7 +25,7 @@ class NewsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentNewsBinding.inflate(inflater)
-        val adapter = NewsGridAdapter()
+        val adapter = NewsListAdapter()
         binding.apply {
             lifecycleOwner = this@NewsFragment
             photosGrid.adapter = adapter
