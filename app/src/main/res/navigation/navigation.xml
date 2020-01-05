@@ -2,10 +2,33 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation"
-    app:startDestination="@id/newsFragment">
+    app:startDestination="@id/homeViewPageFragment">
 
     <fragment
+        android:id="@+id/homeViewPageFragment"
+        android:name="com.beone.newsapp.ui.HomeViewPageFragment">
+        <action
+            android:id="@+id/action_homeViewPageFragment_to_newsDetailFragment"
+            app:destination="@id/newsDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newsDetailFragment"
+        android:name="com.beone.newsapp.ui.NewsDetailFragment">
+        <argument
+            android:name="newsId"
+            app:argType="string" />
+    </fragment>
+    <fragment
         android:id="@+id/newsFragment"
-        android:name="com.beone.newsapp.newslist.NewsFragment"
-        android:label="NewsFragment" />
+        android:name="com.beone.newsapp.ui.NewsFragment" />
+    <fragment
+        android:id="@+id/businessFragment"
+        android:name="com.beone.newsapp.ui.BusinessFragment" />
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.beone.newsapp.ui.FavoritesFragment">
+        <action
+            android:id="@+id/action_favoritesFragment_to_homeViewPageFragment"
+            app:destination="@id/homeViewPageFragment" />
+    </fragment>
 </navigation>
