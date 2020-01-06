@@ -19,7 +19,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.beone.newsapp.R
 import com.beone.newsapp.databinding.FragmentNewsDetailBinding
-import com.beone.newsapp.util.eraseCharNumber
+import com.beone.newsapp.extensions.eraseCharNumber
 import com.beone.newsapp.viewmodel.NewsDetailViewModel
 import com.beone.newsapp.viewmodel.NewsDetailViewModelFactory
 import com.google.android.material.snackbar.Snackbar
@@ -38,7 +38,7 @@ class NewsDetailFragment : Fragment() {
     }
 
     lateinit var binding: FragmentNewsDetailBinding
-    var isFavorite: Boolean = false
+    private var isFavorite: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,7 +74,8 @@ class NewsDetailFragment : Fragment() {
                                 newsDetailViewModel.addToFavorites()
                                 val mySnackbar = Snackbar.make(
                                     binding.coordinatorLayout,
-                                    "Added to Favorites", Snackbar.LENGTH_SHORT
+                                    this@NewsDetailFragment.getString(R.string.snackbar_msg),
+                                    Snackbar.LENGTH_SHORT
                                 )
                                 mySnackbar.show()
 

@@ -25,15 +25,22 @@ private val retrofit = Retrofit.Builder()
     .addCallAdapterFactory(CoroutineCallAdapterFactory())
     .build()
 
+enum class Category(val title: String) {
+    Business("Business"),
+    Entertainment("Entertainment"),
+    General("General"),
+    Health("Health"),
+    Science("Science"),
+    Sports("Sports"),
+    Technology("Technology")
+}
+
+enum class ApiStatus { ERROR, DONE }
+
 interface NewsApiService {
     @Headers("X-Api-Key: $API_KEY")
     @GET("/v2/top-headlines")
-    suspend fun getTopNews(@Query("country") country: String): NetworkTopNewsObject
-
-    @Headers("X-Api-Key: $API_KEY")
-    @GET("/v2/top-headlines")
-    suspend fun getBusinessNews(@Query("country") country: String, @Query("category") category: String): NetworkTopNewsObject
-
+    suspend fun getTopNews(@Query("country") country: String, @Query("category") category: String): NetworkTopNewsObject
 }
 
 object NewsApi {

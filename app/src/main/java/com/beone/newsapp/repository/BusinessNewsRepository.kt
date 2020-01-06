@@ -1,39 +1,42 @@
 package com.beone.newsapp.repository
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.beone.newsapp.database.NewsDatabase
 import com.beone.newsapp.database.asDomainModel
-import com.beone.newsapp.domain.BusinessNews
-import com.beone.newsapp.domain.asFavoritesModel
+import com.beone.newsapp.domain.TopNews
+import com.beone.newsapp.network.ApiStatus
+import com.beone.newsapp.network.Category
 import com.beone.newsapp.network.NewsApi
-import com.beone.newsapp.network.topnews.asBusinessDatabaseModel
-import kotlinx.coroutines.*
-import retrofit2.HttpException
+import com.beone.newsapp.network.topnews.asTopNewsDatabaseModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class BusinessNewsRepository(private val database: NewsDatabase) {
+class BusinessNewsRepository(val database: NewsDatabase) {
 
-    val businessNews: LiveData<List<BusinessNews>> =
-        Transformations.map(database.businessNewsDao.getBusinessNews()) {
+    private val _status = MutableLiveData<ApiStatus>()
+    val status: LiveData<ApiStatus>
+        get() = _status
+
+    val businessNews: LiveData<List<TopNews>> =
+        Transformations.map(database.topNewsDao.getNews(Category.Business.title)) {
             it.asDomainModel()
         }
 
     private val service = NewsApi.retrofitService
-    suspend fun refreshBusinessNews() = withContext(Dispatchers.IO) {
+    suspend fun refreshNews() {
         try {
-            val newsList = service.getBusinessNews("us", "business")
-            database.businessNewsDao.insertBusinessNews(
-                newsList.asBusinessDatabaseModel()
-            )
+            withContext(Dispatchers.IO) {
+                val newsList = service.getTopNews("us", Category.Business.title)
+                database.topNewsDao.insertTopNews(newsList.asTopNewsDatabaseModel(Category.Business.title))
+            }
+            _status.postValue(ApiStatus.DONE)
+
         } catch (e: Exception) {
-            Log.d("RequestError: ", "$e")
+            _status.postValue(ApiStatus.ERROR)
         }
     }
 
-    fun getBusinessNewsById(newsId: String) =
-        Transformations.map(database.businessNewsDao.getBusinessNewsById(newsId)) {
-            it.asDomainModel()
-        }
 }

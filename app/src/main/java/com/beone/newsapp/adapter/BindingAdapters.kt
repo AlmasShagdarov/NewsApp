@@ -1,13 +1,14 @@
 package com.beone.newsapp.adapter
 
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.beone.newsapp.R
-import com.beone.newsapp.util.eraseCharNumber
-import com.beone.newsapp.util.format
-import com.beone.newsapp.util.humanizeDiff
-import com.beone.newsapp.util.toDate
+import com.beone.newsapp.extensions.eraseCharNumber
+import com.beone.newsapp.extensions.format
+import com.beone.newsapp.extensions.humanizeDiff
+import com.beone.newsapp.extensions.toDate
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
@@ -22,6 +23,15 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
                     .error(R.drawable.broken_image)
             )
             .into(imgView)
+    }
+}
+
+@BindingAdapter("isGone")
+fun bindIsGone(view: View, isGone: Boolean) {
+    view.visibility = if (isGone) {
+        View.GONE
+    } else {
+        View.VISIBLE
     }
 }
 

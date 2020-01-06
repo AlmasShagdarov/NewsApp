@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.beone.newsapp.database.getDatabase
 import com.beone.newsapp.repository.BusinessNewsRepository
-import com.beone.newsapp.repository.NewsRepository
 import kotlinx.coroutines.*
 
 class BusinessViewModel(application: Application) : AndroidViewModel(application) {
@@ -14,11 +13,11 @@ class BusinessViewModel(application: Application) : AndroidViewModel(application
 
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
-
+    val status = businessNewsRepository.status
     val businessNews = businessNewsRepository.businessNews
     fun refreshNews() {
         viewModelScope.launch {
-            businessNewsRepository.refreshBusinessNews()
+            businessNewsRepository.refreshNews()
         }
     }
 

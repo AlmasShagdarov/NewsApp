@@ -9,9 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.beone.newsapp.R
-import com.beone.newsapp.adapter.NewsPagerAdapter
-import com.beone.newsapp.adapter.TOP_BUSINESS_PAGE_INDEX
-import com.beone.newsapp.adapter.TOP_NEWS_PAGE_INDEX
+import com.beone.newsapp.adapter.*
 import com.beone.newsapp.databinding.FragmentViewPagerBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -54,6 +52,11 @@ class HomeViewPageFragment : Fragment() {
         return when (position) {
             TOP_NEWS_PAGE_INDEX -> getString(R.string.news_title)
             TOP_BUSINESS_PAGE_INDEX -> getString(R.string.business_news_title)
+            TOP_ENTERTAINMENT_PAGE_INDEX -> getString(R.string.entertainment_news_title)
+            TOP_HEALTH_PAGE_INDEX -> getString(R.string.health)
+            TOP_SCIENCE_PAGE_INDEX -> getString(R.string.science)
+            TOP_SPORTS_PAGE_INDEX -> getString(R.string.sports)
+            TOP_TECH_PAGE_INDEX -> getString(R.string.tech)
             else -> null
         }
     }

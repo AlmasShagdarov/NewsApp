@@ -2,7 +2,7 @@ package com.beone.newsapp.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.beone.newsapp.util.eraseSourceInfo
+import com.beone.newsapp.extensions.eraseSourceInfo
 
 
 @Entity
@@ -15,7 +15,8 @@ data class Favorites constructor(
     val publishedTime: String,
     val content: String?,
     val author: String?,
-    val sourceInfo: String?
+    val sourceInfo: String?,
+    val category: String
 ) {
     val formattedTitle: String
         get() = title.eraseSourceInfo()

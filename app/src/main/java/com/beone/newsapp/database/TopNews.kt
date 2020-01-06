@@ -14,7 +14,8 @@ data class DatabaseTopNews constructor(
     val publishedTime: String,
     val content: String?,
     val author: String?,
-    val sourceInfo: String?
+    val sourceInfo: String?,
+    val category: String
 )
 
 fun List<DatabaseTopNews>.asDomainModel(): List<TopNews> {
@@ -27,7 +28,8 @@ fun List<DatabaseTopNews>.asDomainModel(): List<TopNews> {
             publishedTime = it.publishedTime,
             content = it.content,
             author = it.author,
-            sourceInfo = it.sourceInfo
+            sourceInfo = it.sourceInfo,
+            category = it.category
         )
     }
 }
@@ -41,6 +43,7 @@ fun DatabaseTopNews.asDomainModel(): TopNews {
         publishedTime,
         content,
         author,
-        sourceInfo
+        sourceInfo,
+        category
     )
 }

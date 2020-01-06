@@ -7,12 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-
+import androidx.navigation.fragment.findNavController
 import com.beone.newsapp.R
-import com.beone.newsapp.adapter.BusinessNewsListAdapter
+import com.beone.newsapp.adapter.NewsListener
 import com.beone.newsapp.adapter.TopNewsListAdapter
 import com.beone.newsapp.databinding.FragmentBusinessNewsBinding
-import com.beone.newsapp.databinding.FragmentNewsBinding
+import com.beone.newsapp.domain.TopNews
+import com.beone.newsapp.extensions.isNetworkAvailable
+import com.beone.newsapp.network.ApiStatus
 import com.beone.newsapp.viewmodel.BusinessViewModel
 import com.beone.newsapp.viewmodel.BusinessViewModelFactory
 
@@ -26,7 +28,7 @@ class BusinessFragment : Fragment() {
             .get(BusinessViewModel::class.java)
     }
 
-    private lateinit var adapter: BusinessNewsListAdapter
+    private lateinit var adapter: TopNewsListAdapter
     private lateinit var binding: FragmentBusinessNewsBinding
 
     override fun onCreateView(
@@ -37,25 +39,52 @@ class BusinessFragment : Fragment() {
         initBinding(binding)
         initSwipeRefreshLayout(binding)
         initListData()
-        setHasOptionsMenu(true)
+        observeStatus()
         return binding.root
     }
 
+    private fun observeStatus() {
+        businessViewModel.status.observe(viewLifecycleOwner, Observer { status ->
+            @Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
+            when (status) {
+                ApiStatus.DONE -> {
+                    binding.swipeToRefreshBusiness.isRefreshing = false
+                    binding.txtConnectionBusiness.visibility = View.GONE
+                }
+                ApiStatus.ERROR -> {
+                    when (requireNotNull(value = this.activity).isNetworkAvailable()) {
+                        true -> binding.txtConnectionBusiness.text = "Server not responding"
+                        false -> binding.txtConnectionBusiness.text = "No internet connection"
+                    }
+                    binding.swipeToRefreshBusiness.isRefreshing = false
+                    binding.txtConnectionBusiness.visibility = View.VISIBLE
+                    binding.txtConnectionBusiness.postDelayed({
+                        binding.txtConnectionBusiness.visibility = View.GONE
+                    }, 3000)
+                }
+            }
+        })
+    }
+
     private fun initBinding(binding: FragmentBusinessNewsBinding) {
-        adapter = BusinessNewsListAdapter()
+        adapter = TopNewsListAdapter(NewsListener { navigateToNews(it) })
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             businessRecyclerview.adapter = adapter
+            businessRecyclerview.itemAnimator = null
         }
     }
 
+    private fun navigateToNews(news: TopNews) {
+        val direction =
+            HomeViewPageFragmentDirections.homeViewPageFragmentToNewsDetailFragment(news.urlToArticle)
+        findNavController().navigate(direction)
+    }
     private fun initSwipeRefreshLayout(binding: FragmentBusinessNewsBinding) {
-        val swipeToRefreshBusiness = binding.swipeToRefreshBusiness
-        with(swipeToRefreshBusiness) {
+        with(binding.swipeToRefreshBusiness) {
             setColorSchemeResources(R.color.colorPrimary)
             setOnRefreshListener {
                 businessViewModel.refreshNews()
-                swipeToRefreshBusiness.isRefreshing = false
             }
         }
     }

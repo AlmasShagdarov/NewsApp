@@ -12,7 +12,8 @@ import com.beone.newsapp.domain.TopNews
 import com.beone.newsapp.ui.HomeViewPageFragmentDirections
 
 
-class TopNewsListAdapter : ListAdapter<TopNews, TopNewsListAdapter.TopNewsViewHolder>(
+class TopNewsListAdapter(private val clickListener: NewsListener) :
+    ListAdapter<TopNews, TopNewsListAdapter.TopNewsViewHolder>(
     DiffCallback
 ) {
 
@@ -24,29 +25,16 @@ class TopNewsListAdapter : ListAdapter<TopNews, TopNewsListAdapter.TopNewsViewHo
 
     override fun onBindViewHolder(holderTop: TopNewsViewHolder, position: Int) {
         val news = getItem(position)
-        holderTop.bind(news)
+        holderTop.bind(news, clickListener)
     }
 
 
     class TopNewsViewHolder(private var binding: NewsListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        init {
-            binding.setClickListener {
-                binding.news?.let { news ->
-                    navigateToNews(news, it)
-                }
-            }
-        }
-
-        private fun navigateToNews(news: TopNews, it: View) {
-            val direction =
-                HomeViewPageFragmentDirections.actionHomeViewPageFragmentToNewsDetailFragment(news.urlToArticle)
-            it.findNavController().navigate(direction)
-        }
-
-        fun bind(topNews: TopNews) {
+        fun bind(topNews: TopNews, clickListener: NewsListener) {
             binding.news = topNews
+            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
 
@@ -62,4 +50,8 @@ class TopNewsListAdapter : ListAdapter<TopNews, TopNewsListAdapter.TopNewsViewHo
         }
     }
 
+}
+
+class NewsListener(val clickListener: (topNews: TopNews) -> Unit) {
+    fun onClick(news: TopNews) = clickListener(news)
 }

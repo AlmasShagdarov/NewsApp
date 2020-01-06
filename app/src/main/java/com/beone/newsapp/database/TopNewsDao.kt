@@ -9,8 +9,8 @@ import androidx.room.Query
 @Dao
 interface TopNewsDao {
 
-    @Query("select * from databasetopnews order by publishedTime desc")
-    fun getNews(): LiveData<List<DatabaseTopNews>>
+    @Query("select * from databasetopnews where category = :category order by publishedTime desc")
+    fun getNews(category: String): LiveData<List<DatabaseTopNews>>
 
     @Query("select * from databasetopnews where urlToArticle = :newsId")
     fun getNewsById(newsId: String): LiveData<DatabaseTopNews>

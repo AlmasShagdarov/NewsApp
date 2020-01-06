@@ -1,7 +1,8 @@
 package com.beone.newsapp.domain
 
 import com.beone.newsapp.database.Favorites
-import com.beone.newsapp.util.eraseSourceInfo
+import com.beone.newsapp.extensions.eraseSourceInfo
+
 
 data class TopNews constructor(
     val urlToArticle: String,
@@ -11,7 +12,8 @@ data class TopNews constructor(
     val publishedTime: String,
     val content: String?,
     val author: String?,
-    val sourceInfo: String?
+    val sourceInfo: String?,
+    val category: String
 ) {
     val formattedTitle: String
         get() = title.eraseSourceInfo()
@@ -26,6 +28,7 @@ fun TopNews.asFavoritesModel(): Favorites {
         publishedTime,
         content,
         author,
-        sourceInfo
+        sourceInfo,
+        category
     )
 }

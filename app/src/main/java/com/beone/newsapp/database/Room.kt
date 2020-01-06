@@ -6,13 +6,12 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [DatabaseTopNews::class, DatabaseBusinessNews::class, Favorites::class],
-    version = 5,
+    entities = [DatabaseTopNews::class, Favorites::class],
+    version = 1,
     exportSchema = false
 )
 abstract class NewsDatabase : RoomDatabase() {
     abstract val topNewsDao: TopNewsDao
-    abstract val businessNewsDao: BusinessNewsDao
     abstract val favoritesDao: FavoritesDao
 }
 

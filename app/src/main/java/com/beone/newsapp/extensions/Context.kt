@@ -1,4 +1,4 @@
-package com.beone.newsapp.util
+package com.beone.newsapp.extensions
 
 import android.app.Activity
 import android.content.Context
@@ -6,19 +6,27 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.Log
-import java.text.SimpleDateFormat
-import java.util.*
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 
-
-fun String.eraseSourceInfo(): String {
-    val titleSourceRegex = Regex(" - (.*)$")
-    return replace(titleSourceRegex, "")
+fun AppCompatActivity.hideKeyboard() {
+    val view = this.currentFocus
+    if (view != null) {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 }
 
-fun String.eraseCharNumber(): String {
-    val descriptionRegex = Regex("\\[\\+\\d*\\schars]")
-    return replace(descriptionRegex, "")
+fun Fragment.hideKeyboard() {
+    val activity = this.activity
+    if (activity is AppCompatActivity) {
+        activity.hideKeyboard()
+    }
 }
+
 
 fun Activity.isNetworkAvailable(): Boolean {
     val connectivityManager =
@@ -55,39 +63,3 @@ fun Activity.isNetworkAvailable(): Boolean {
     Log.i("update_status", "Network is available : FALSE ")
     return false
 }
-
-fun String.toDate(): Date {
-    return SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale("us")).parse(this) ?: Date()
-}
-
-
-enum class TimeUnits(val value: Long) {
-    SECOND(1000L),
-    MINUTE(60 * SECOND.value),
-    HOUR(60 * MINUTE.value),
-}
-
-fun Date.humanizeDiff(date: Date = Date()): String {
-    val dif = kotlin.math.abs(this.time - date.time)
-
-    return when {
-        dif <= TimeUnits.SECOND.value -> " - rigth now"
-        dif <= TimeUnits.SECOND.value * 45 -> " - few seconds ago"
-        dif <= TimeUnits.SECOND.value * 75 -> " - minute ago"
-        dif <= TimeUnits.MINUTE.value * 45 -> " - ${(dif / TimeUnits.MINUTE.value).toInt()} minutes ago"
-        dif <= TimeUnits.MINUTE.value * 75 -> " - hour ago"
-        dif <= TimeUnits.HOUR.value * 22 -> " - ${(dif / TimeUnits.HOUR.value).toInt()} hours ago"
-        dif <= TimeUnits.HOUR.value * 26 -> " - yesterday"
-        else -> " - ${this.format()}"
-    }
-}
-
-fun Date.format(pattern: String = "dd.MM.yy"): String {
-    val dateFormat = SimpleDateFormat(pattern, Locale.US)
-    return dateFormat.format(this)
-}
-
-
-
-
-

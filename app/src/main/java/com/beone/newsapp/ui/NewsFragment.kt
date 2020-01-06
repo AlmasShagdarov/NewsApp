@@ -5,21 +5,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.beone.newsapp.R
+import com.beone.newsapp.adapter.NewsListener
 import com.beone.newsapp.adapter.TopNewsListAdapter
 import com.beone.newsapp.databinding.FragmentNewsBinding
-import com.beone.newsapp.util.isNetworkAvailable
-import com.beone.newsapp.viewmodel.ApiStatus
+import com.beone.newsapp.domain.TopNews
+import com.beone.newsapp.extensions.isNetworkAvailable
+import com.beone.newsapp.network.ApiStatus
 import com.beone.newsapp.viewmodel.NewsViewModel
 import com.beone.newsapp.viewmodel.NewsViewModelFactory
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.util.*
+
 
 
 /**
@@ -46,6 +46,12 @@ class NewsFragment : Fragment() {
         initBinding()
         initSwipeRefreshLayout(binding)
         initListData()
+        observeStatus()
+
+        return binding.root
+    }
+
+    private fun observeStatus() {
         newsViewModel.status.observe(viewLifecycleOwner, Observer { status ->
             @Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
             when (status) {
@@ -66,17 +72,23 @@ class NewsFragment : Fragment() {
                 }
             }
         })
-
-        return binding.root
     }
 
 
     private fun initBinding() {
-        adapter = TopNewsListAdapter()
+        adapter = TopNewsListAdapter(NewsListener { navigateToNews(it) })
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             newsRecyclerview.adapter = adapter
+            newsRecyclerview.itemAnimator = null
         }
+    }
+
+
+    private fun navigateToNews(news: TopNews) {
+        val direction =
+            HomeViewPageFragmentDirections.homeViewPageFragmentToNewsDetailFragment(news.urlToArticle)
+        findNavController().navigate(direction)
     }
 
     private fun initListData() {

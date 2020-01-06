@@ -26,6 +26,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
 }
 
 dependencies {
@@ -54,9 +58,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$version_lifecycle_extensions"
 
     // Navigation
-    implementation "android.arch.navigation:navigation-fragment-ktx:$version_navigation"
-    implementation "android.arch.navigation:navigation-ui-ktx:$version_navigation"
-
+    implementation "androidx.navigation:navigation-fragment-ktx:$version_navigation"
+    implementation "androidx.navigation:navigation-ui-ktx:$version_navigation"
+    implementation 'de.hdodenhof:circleimageview:3.0.1'
     // Retrofit with Moshi Converters
     implementation "com.squareup.retrofit2:retrofit:$version_retrofit"
     implementation "com.squareup.retrofit2:converter-moshi:$version_retrofit"
@@ -72,5 +76,7 @@ dependencies {
     //ViewPager 2
     implementation "androidx.viewpager2:viewpager2:$rootProject.viewPagerVersion"
     implementation "com.google.android.material:material:$rootProject.materialVersion"
+
+    implementation "androidx.work:work-runtime-ktx:$work_version"
 
 }

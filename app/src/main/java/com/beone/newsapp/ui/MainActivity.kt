@@ -9,20 +9,41 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.beone.newsapp.R
 import com.beone.newsapp.databinding.ActivityMainBinding
+import com.beone.newsapp.work.RefreshDataWorker
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var navController: NavController
-    lateinit var drawerLayout: DrawerLayout
+    private lateinit var navController: NavController
+    private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         val binding =
             DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
         setupNavigation(binding)
+        oneTimeRefreshWorkStart()
 
+    }
+
+    private fun oneTimeRefreshWorkStart() {
+        GlobalScope.launch {
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.UNMETERED)
+                .build()
+
+            val worker =
+                OneTimeWorkRequestBuilder<RefreshDataWorker>().setConstraints(constraints).build()
+            WorkManager.getInstance().enqueue(worker)
+        }
     }
 
     private fun setupNavigation(binding: ActivityMainBinding) {
@@ -38,12 +59,17 @@ class MainActivity : AppCompatActivity() {
         with(binding.navView) {
             setupWithNavController(navController)
             setNavigationItemSelectedListener { menuItem ->
-                drawerLayout.closeDrawers()
-                menuItem.isChecked = true
                 when (menuItem.itemId) {
-                    R.id.homeViewPageFragment -> navController.navigate(R.id.homeViewPageFragment)
-                    R.id.favoritesFragment -> navController.navigate(R.id.favoritesFragment)
+                    R.id.homeViewPageFragment -> {
+                        binding.navView.setCheckedItem(R.id.homeViewPageFragment)
+                        navController.navigate(R.id.homeViewPageFragment)
+                    }
+                    R.id.favoritesFragment -> {
+                        binding.navView.setCheckedItem(R.id.favoritesFragment)
+                        navController.navigate(R.id.favoritesFragment)
+                    }
                 }
+                drawerLayout.closeDrawers()
                 true
             }
         }

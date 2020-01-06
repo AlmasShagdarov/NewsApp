@@ -1,7 +1,5 @@
 package com.beone.newsapp.adapter
 
-import com.beone.newsapp.database.Favorites
-import com.beone.newsapp.databinding.FavoritesListItemBinding
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +7,9 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.beone.newsapp.ui.FavoritesFragment
+import com.beone.newsapp.database.Favorites
+import com.beone.newsapp.databinding.FavoritesListItemBinding
 import com.beone.newsapp.ui.FavoritesFragmentDirections
-import com.beone.newsapp.ui.HomeViewPageFragmentDirections
 
 
 class FavoritesListAdapter : ListAdapter<Favorites, FavoritesListAdapter.FavoritesViewHolder>(
@@ -35,15 +33,15 @@ class FavoritesListAdapter : ListAdapter<Favorites, FavoritesListAdapter.Favorit
 
         init {
             binding.setClickListener {
-                binding.news?.let {
-                    navigateToNews(itemView)
+                binding.news?.let { news ->
+                    navigateToNews(news, it)
                 }
             }
         }
 
-        private fun navigateToNews(it: View) {
+        private fun navigateToNews(news: Favorites, it: View) {
             val direction =
-                FavoritesFragmentDirections.actionFavoritesFragmentToHomeViewPageFragment()
+                FavoritesFragmentDirections.favoritesFragmentToNewsDetailFragment(news.urlToArticle)
             it.findNavController().navigate(direction)
         }
 

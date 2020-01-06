@@ -9,17 +9,5 @@
             android:id="@+id/favoritesFragment"
             android:title="@string/favorites"
             android:icon="@drawable/ic_favorites" />
-        <item
-            android:id="@+id/settings"
-            android:title="@string/settings"
-            android:icon="@drawable/ic_settings" />
-        <item
-            android:id="@+id/headingsFragment"
-            android:title="@string/headings"
-            android:icon="@drawable/ic_heading" />
-        <item
-            android:id="@+id/about"
-            android:title="@string/about"
-            android:icon="@drawable/ic_about" />
     </group>
 </menu>
