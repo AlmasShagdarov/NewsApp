@@ -15,7 +15,7 @@ You need to insert your API key.
     ``` 
     
 #### Demo
-![](app/demo/ezgif.com-video-to-gif.gif)
+![](app/demo/demoapp.gif)
 
 ### Features
 
