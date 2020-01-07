@@ -35,7 +35,6 @@ You need to insert your API key.
 * Glide
 * CardView
 * RecyclerView
-* Cardview
 * ConstraintLayout
 
 ### Screenshots
